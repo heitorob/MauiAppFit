@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MauiAppFit.Models;
+﻿using MauiAppFit.Models;
 using SQLite;
 
 namespace MauiAppFit.Helpers
@@ -29,6 +24,11 @@ namespace MauiAppFit.Helpers
             return conectar.QueryAsync<Atividade>(sql, a.Descricao, a.Data, a.Peso, a.Observacoes, a.Id);
         }
 
+        public  Task<int> Delete(int id)
+        {
+            return conectar.Table<Atividade>().DeleteAsync(i => i.Id == id);
+        }
+
         public Task<List<Atividade>> GetAll()
         {
             return conectar.Table<Atividade>().ToListAsync();
@@ -37,6 +37,12 @@ namespace MauiAppFit.Helpers
         public Task GetById(int id)
         {
             return conectar.Table<Atividade>().FirstAsync(i => i.Id == id);
+        }
+
+        public Task<List<Atividade>> Search(string q)
+        {
+            string sql = "SELECT * FROM Tempo WHERE Descricao LIKE ?";
+            return conectar.QueryAsync<Atividade>(sql, "%", q, "%");
         }
     }
 }
