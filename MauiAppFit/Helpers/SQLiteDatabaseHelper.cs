@@ -34,7 +34,7 @@ namespace MauiAppFit.Helpers
             return conectar.Table<Atividade>().ToListAsync();
         }
 
-        public Task GetById(int id)
+        public Task<Atividade> GetById(int id)
         {
             return conectar.Table<Atividade>().FirstAsync(i => i.Id == id);
         }

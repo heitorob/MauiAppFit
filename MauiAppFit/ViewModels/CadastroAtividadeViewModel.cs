@@ -80,7 +80,67 @@ namespace MauiAppFit.ViewModels
 
         public ICommand NovaAtividade
         {
+            get => new Command(() =>
+            {
+                Id = 0;
+                Descricao = string.Empty;
+                Data = DateTime.Now;
+                Peso = null;
+                Observacoes = string.Empty;
+            });
+        }
 
+        public ICommand SalvarAtividade
+        {
+            get => new Command(async () =>
+            {
+                try
+                {
+                    Atividade model = new()
+                    {
+                        Descricao = this.Descricao,
+                        Data = this.Data,
+                        Peso = this.Peso,
+                        Observacoes = this.Observacoes
+                    };
+                    if (this.Id == 0)
+                    {
+                        await App.Database.Insert(model);
+                    }
+                    else
+                    {
+                        model.Id = this.Id;
+                        await App.Database.Update(model);
+                    }
+                    await Shell.Current.DisplayAlert("Atividade Salva", "Atividade Salva", "OK");
+
+                    await Shell.Current.GoToAsync("//MinhasAtividades");
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+        }
+        public ICommand VerAtividade
+        {
+            get => new Command<int>(async (int id) =>
+            {
+                try
+                {
+                    Atividade model = await App.Database.GetById(id);
+
+                    this.Id = model.Id;
+                    this.Descricao = model.Descricao;
+                    this.Peso = model.Peso;
+                    this.Data = model.Data;
+                    this.Observacoes = model.Observacoes;
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
         }
     }
 }
