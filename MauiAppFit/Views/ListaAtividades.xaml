@@ -12,7 +12,7 @@
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="10">
             <StackLayout Orientation="Horizontal">
                 <SearchBar Placeholder="Busque por Descrição"
                            Text="{Binding ParametroBusca}" />
